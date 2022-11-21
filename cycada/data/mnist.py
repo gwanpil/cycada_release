@@ -12,6 +12,7 @@ class MNIStParams(DatasetParams):
     mean = 0.5
     std = 0.5
     num_cls      = 10
+    print("====cycada/data/mnist.py 15==여러 파라미터 가져오기============")
 
 @register_dataset_obj('mnist')
 class MNIST(datasets.MNIST):

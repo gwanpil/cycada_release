@@ -7,7 +7,7 @@ import numpy as np
 
 class TaskNet(nn.Module):
 
-    num_channels = 3
+    num_channels = 1
     image_size = 32
     name = 'TaskNet'
 
@@ -47,8 +47,8 @@ class TaskNet(nn.Module):
 class LeNet(TaskNet):
     "Network used for MNIST or USPS experiments."    
 
-    num_channels = 1
-    image_size = 28
+    num_channels = 3
+    image_size = (600,1200)#28
     name = 'LeNet'
     out_dim = 500 # dim of last feature layer
 

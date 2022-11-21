@@ -19,6 +19,8 @@ from ..data.data_loader import load_data
 from .test_task_net import test
 from .util import make_variable
 
+# 여기 위치 : Documents/GitHub/cycada_release/cycada/tools
+
 def train_epoch(loader, net, opt_net, epoch):
     log_interval = 100 # specifies how often to display
     net.train()
@@ -52,6 +54,7 @@ def train_epoch(loader, net, opt_net, epoch):
             print('  Acc: {:.2f}'.format(acc))
 
 
+# source pre-train모델 만들기 
 def train(data, datadir, model, num_cls, outdir='', 
         num_epoch=100, batch=128, 
         lr=1e-4, betas=(0.9, 0.999), weight_decay=0):
@@ -73,10 +76,12 @@ def train(data, datadir, model, num_cls, outdir='',
     ############################
     # Load train and test data # 
     ############################
+    # data : 그냥 데이터 셋 명칭 저장되어있음ㄴ
     train_data = load_data(data, 'train', batch=batch, 
         rootdir=datadir, num_channels=net.num_channels, 
         image_size=net.image_size, download=True, kwargs=kwargs)
     
+    print("==============train data 가져옴")
     test_data = load_data(data, 'test', batch=batch, 
         rootdir=datadir, num_channels=net.num_channels, 
         image_size=net.image_size, download=True, kwargs=kwargs)

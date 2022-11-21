@@ -4,10 +4,17 @@ from os.path import join
 import numpy as np
 from PIL import Image
 
+import numpy as np
+import torch
+
 import torch
 import torch.utils.data as data
 import torch.nn as nn
 from torchvision import datasets, transforms
+
+import urllib.request
+import zipfile
+import glob
 
 from ..util import to_tensor_raw
 
@@ -21,12 +28,20 @@ def load_data(name, dset, batch=64, rootdir='', num_channels=3,
                 image_size, num_channels, download=download)
         dataset = AddaDataset(src_dataset, tgt_dataset)
     else:
-        dataset = get_dataset(name, rootdir, dset, image_size, num_channels,
-                download=download)
+        print("====cycada/data/data_loader.py 24==twin데이터 가져오기============")
+#         dataset = get_dataset(name, rootdir, dset, image_size, num_channels,
+#                 download=download) 
+        dataset = datasets.ImageFolder(root='/Users/gwanpil/Documents/GitHub/cycada_release/preprocessing/Dataset/twin/image', 
+                                    transform=transforms.Compose([
+                                        transforms.ToTensor(), 
+                                    ])
+                                   )
+    print("====fae ok============")
     if len(dataset) == 0:
         return None
     loader = torch.utils.data.DataLoader(dataset, batch_size=batch, 
             shuffle=is_train, **kwargs)
+    print("==== dfdfdsffdfdfd============")
     return loader
 
 def get_transform_dataset(dataset_name, rootdir, net_transform, downscale):
@@ -67,6 +82,7 @@ def get_transform(params, image_size, num_channels):
     Gray2RGB = transforms.Lambda(lambda x: x.convert('RGB'))
     RGB2Gray = transforms.Lambda(lambda x: x.convert('L'))
 
+    print("여기서 이미지 사이즈 설정 cycada/data/data_loader.py 72========")
     transform = []
     # Does size request match original size?
     if not image_size == params.image_size:
@@ -74,6 +90,7 @@ def get_transform(params, image_size, num_channels):
    
     # Does number of channels requested match original?
     if not num_channels == params.num_channels:
+        print('동일한가?')
         if num_channels == 1:
             transform.append(RGB2Gray)
         elif num_channels == 3:
@@ -139,9 +156,12 @@ class DatasetParams(object):
 
 def get_dataset(name, rootdir, dset, image_size, num_channels, download=True):
     is_train = (dset == 'train')
+    print("==============================이건 뭘까?============")
     print('get dataset:', name, rootdir, dset)
-    params = data_params[name] 
+    params = data_params[name] # mnist 기준 <class 'cycada.data.mnist.MNIStParams'>
+    print("params ??? ? ", params)
     transform = get_transform(params, image_size, num_channels)
+    print("==============================get_target_transform 이건 뭘까?============")
     target_transform = get_target_transform(params)
     return dataset_obj[name](rootdir, train=is_train, transform=transform,
             target_transform=target_transform, download=download)
